@@ -1,0 +1,6 @@
+build
+dist
+.env.*.local
+node_modules
+*.http
+*.request
