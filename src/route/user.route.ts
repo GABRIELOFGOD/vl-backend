@@ -1,17 +1,19 @@
 import { Router } from "express";
-import { registerUser } from "../controller/user.controller";
+import { getProfile, loginUser, registerUser } from "../controller/user.controller";
+import { userAuth } from "../middleware/adminAuth.middleware";
 
 const userRouter = Router();
 
+userRouter.post("/login", loginUser);
+
+userRouter.use(userAuth)
 userRouter.post("/", registerUser);
 
 userRouter.get("/", (req, res) => {
   res.send("Gell all user");
 });
 
-userRouter.get("/:id", (req, res) => {
-  res.send(`Get user with id ${req.params.id}`);
-});
+userRouter.get("/profile", getProfile);
 
 userRouter.patch("/:id", (req, res) => {
   res.send(`Update user with id ${req.params.id}`);

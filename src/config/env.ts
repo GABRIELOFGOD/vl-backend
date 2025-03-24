@@ -8,4 +8,5 @@ export const {
   PORT,
   FRONTEND_URL,
   DB_HOST, DB_USER, DB_PASSWORD, DB_NAME,
+  JWT_SECRET
 } = process.env;
