@@ -3,6 +3,7 @@ import { DataSource } from 'typeorm';
 import { DB_HOST, DB_NAME, DB_PASSWORD, DB_USER } from './env';
 import { General } from '../entities/general.entity';
 import { User } from '../entities/user.entity';
+import { Surah } from '../entities/surah.entity';
 
 export const dataSource = new DataSource({
   type: 'mysql',
@@ -11,6 +12,6 @@ export const dataSource = new DataSource({
   username: DB_USER || 'root',
   password: DB_PASSWORD,
   database: DB_NAME,
-  entities: [General, User],
+  entities: [General, User, Surah],
   synchronize: true,
 });

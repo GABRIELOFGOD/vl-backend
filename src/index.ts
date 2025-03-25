@@ -7,6 +7,7 @@ import dbConfig from "./config/database.config";
 import dataSourceInitializer from "./utils/dataSourseInitializer";
 import { AppError, globalErrorHandler } from "./utils/error.middleware";
 import userRouter from "./route/user.route";
+import surahRoute from "./route/surah.route";
 
 const app: Application = express();
 dbConfig();
@@ -29,6 +30,7 @@ dataSourceInitializer();
 
 app.use("/api/v1/general", generalRoute);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/surah", surahRoute);
 
 app.all("*", (req: Request, res: Response, next: NextFunction) =>
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404))
