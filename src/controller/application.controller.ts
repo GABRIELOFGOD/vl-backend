@@ -1,0 +1,58 @@
+import { NextFunction, Response } from "express";
+import catchAsync from "../middleware/catchAsync.middleware";
+import { Request } from "../types/user";
+import { plainToInstance } from "class-transformer";
+import { ApplicationDto } from "../dtos/application.dto";
+import { validate } from "class-validator";
+import { AppError } from "../utils/error.middleware";
+import { StatusCode } from "../utils/statusCode";
+import { applicationRepository } from "../utils/repositories";
+import { getApplicationId, getUserAge } from "../services/helpers";
+
+export const postApplication = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const applicationDto = plainToInstance(ApplicationDto, req.body);
+
+  const errors = await validate(applicationDto);
+  if (errors.length > 0) return next(new AppError(errors.map(err => Object.values(err.constraints || {})).join(", "), StatusCode.BAD_REQUEST));
+
+  const userRegistered = await applicationRepository.findOne({
+    where: { email: applicationDto.email }
+  });
+
+  if (userRegistered) return next(new AppError("Sorry you have applied before, kindly login to your account", StatusCode.CONFLICT));
+
+  const userAge = getUserAge(applicationDto.dob);
+
+  let applicationId = getApplicationId();
+  while (await applicationRepository.findOne({ where: { applicationId } })) {
+    applicationId = getApplicationId();
+  }
+
+  const newApplication = applicationRepository.create({
+    ...applicationDto,
+    age: userAge,
+    applicationId
+  });
+
+  await applicationRepository.save(newApplication);
+
+  res.json({
+    message: "Application saved, please continue with your registration and upload required data",
+    applicationId
+  });
+});
+
+export const getApplicationWithApplicationId = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const applicationId = req.params.applicationId;
+  console.log("Heye");
+  const application = await applicationRepository.findOne({
+    where: { applicationId }
+  });
+  console.log("Heye 1");
+
+  if (!application) return next(new AppError("Application not found", StatusCode.NOT_FOUND));
+
+  console.log("sending data");
+
+  res.json({ application });
+});
