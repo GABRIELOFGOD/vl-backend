@@ -8,6 +8,8 @@ import { AppError } from "../utils/error.middleware";
 import { StatusCode } from "../utils/statusCode";
 import { applicationRepository } from "../utils/repositories";
 import { getApplicationId, getUserAge } from "../services/helpers";
+import getApplication from "../services/getApplication";
+import { uploadPhoto } from "../services/fileUpload";
 
 export const postApplication = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const applicationDto = plainToInstance(ApplicationDto, req.body);
@@ -48,11 +50,27 @@ export const getApplicationWithApplicationId = catchAsync(async (req: Request, r
   const application = await applicationRepository.findOne({
     where: { applicationId }
   });
-  console.log("Heye 1");
 
   if (!application) return next(new AppError("Application not found", StatusCode.NOT_FOUND));
 
-  console.log("sending data");
-
   res.json({ application });
 });
+
+export const uploadProfilePhoto = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (!req.file) return next(new AppError("Please upload a photo", StatusCode.BAD_REQUEST));
+    const application = await getApplication(req.applicationId);
+    const photo = await uploadPhoto(req.file);
+    application.passport = photo;
+
+    await applicationRepository.save(application);
+
+    res.json("Passport uploaded successfully");
+  } catch (error: any) {
+    throw new AppError(error.message || "Something went wrong", error.statusCode || StatusCode.INTERNAL_SERVER_ERROR);
+  }
+});
+
+export const continueApplication = catchAsync(async (req: Request, res: Response, next: NextFunction) => {})
+
+export const completeApplication = catchAsync(async (req: Request, res: Response, next: NextFunction) => {});
