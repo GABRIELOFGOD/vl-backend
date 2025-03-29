@@ -6,7 +6,7 @@ const userRouter = Router();
 
 userRouter.post("/login", loginUser);
 
-userRouter.use(userAuth)
+// userRouter.use(userAuth)
 userRouter.post("/", registerUser);
 
 userRouter.get("/", (req, res) => {
