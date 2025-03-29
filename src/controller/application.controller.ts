@@ -62,10 +62,37 @@ export const uploadProfilePhoto = catchAsync(async (req: Request, res: Response,
     const application = await getApplication(req.applicationId);
     const photo = await uploadPhoto(req.file);
     application.passport = photo;
-
     await applicationRepository.save(application);
 
-    res.json("Passport uploaded successfully");
+    res.json({message: "Passport uploaded successfully"});
+  } catch (error: any) {
+    throw new AppError(error.message || "Something went wrong", error.statusCode || StatusCode.INTERNAL_SERVER_ERROR);
+  }
+});
+
+export const uploadBirthCert = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (!req.file) return next(new AppError("Please upload a photo", StatusCode.BAD_REQUEST));
+    const application = await getApplication(req.applicationId);
+    const photo = await uploadPhoto(req.file);
+    application.birthCert = photo;
+    await applicationRepository.save(application);
+
+    res.json({message: "Birth certificatex uploaded successfully"});
+  } catch (error: any) {
+    throw new AppError(error.message || "Something went wrong", error.statusCode || StatusCode.INTERNAL_SERVER_ERROR);
+  }
+});
+
+export const uploadHarfiz = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (!req.file) return next(new AppError("Please upload a photo", StatusCode.BAD_REQUEST));
+    const application = await getApplication(req.applicationId);
+    const photo = await uploadPhoto(req.file);
+    application.hafizCert = photo;
+    await applicationRepository.save(application);
+
+    res.json({message: "Harfiz certificate uploaded successfully"});
   } catch (error: any) {
     throw new AppError(error.message || "Something went wrong", error.statusCode || StatusCode.INTERNAL_SERVER_ERROR);
   }

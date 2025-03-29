@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { completeApplication, continueApplication, getApplicationWithApplicationId, postApplication, uploadProfilePhoto } from "../controller/application.controller";
+import { completeApplication, continueApplication, getApplicationWithApplicationId, postApplication, uploadBirthCert, uploadHarfiz, uploadProfilePhoto } from "../controller/application.controller";
 import { userAuth } from "../middleware/adminAuth.middleware";
 import multer from "multer";
 import { applicationAuth } from "../middleware/application.middleware";
@@ -18,7 +18,11 @@ applicationRoute.post("/", postApplication);
 
 applicationRoute.get("/application/:applicationId", getApplicationWithApplicationId);
 
-applicationRoute.patch("/profile-photo", applicationAuth, upload.single("avatar"), uploadProfilePhoto); 
+applicationRoute.patch("/profile-photo", applicationAuth, upload.single("avatar"), uploadProfilePhoto);
+
+applicationRoute.patch("/harfiz", applicationAuth, upload.single("avatar"), uploadHarfiz);
+
+applicationRoute.patch("/birth", applicationAuth, upload.single("avatar"), uploadBirthCert);
 
 applicationRoute.patch("/:id", (req, res) => {res.send(`Updating application with id ${req.params.id}`)});
 

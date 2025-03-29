@@ -5,11 +5,13 @@ import { StatusCode } from "../utils/statusCode";
 import { AppError } from "../utils/error.middleware";
 
 export const applicationAuth = catchAsync(async (req: Request, _res: Response, next: NextFunction) => {
-  const authHeader = req.headers['applicationId'];
+  // console.log("Headers", req.headers);
+  const authHeader = req.headers['applicationid'];
 
   if (!authHeader) {
     return next(new AppError('Unauthorized: Missing Authorization header', StatusCode.UNAUTHORIZED));
   }
 
   req.applicationId = authHeader;
+  next();
 });
