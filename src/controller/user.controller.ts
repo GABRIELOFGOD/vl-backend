@@ -3,13 +3,17 @@ import { validate } from "class-validator"; // Import the validation function
 import { plainToInstance } from "class-transformer";
 import catchAsync from "../middleware/catchAsync.middleware";
 import { UserRegisterDto } from "../dtos/userRegister.dto";
-import { userRepository } from "../utils/repositories";
+import { applicationRepository, userRepository } from "../utils/repositories";
 import { AppError } from "../utils/error.middleware";
 import { StatusCode } from "../utils/statusCode";
 import { UserLoginDto } from "../dtos/userLogin.dto";
 import { comparePassword, encryptPassword } from "../services/password";
 import { createToken } from "../services/token";
 import { Request } from "../types/user";
+import { EmailService } from "../services/sendEmail";
+import getApplication from "../services/getApplication";
+
+const emailService = new EmailService();
 
 export const registerUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   // Convert request body to UserRegisterDto instance
@@ -32,6 +36,13 @@ export const registerUser = catchAsync(async (req: Request, res: Response, next:
   await userRepository.save(newUser);
 
   const { password, role, ...otherData } = newUser;
+
+  const mailUser = {
+    name: newUser.fname,
+    email: newUser.email
+  }
+
+  await emailService.sendAdminRegisterEmail(mailUser);
 
   res.status(StatusCode.CREATED).json({
     message: "User registered successfully",
@@ -79,3 +90,51 @@ export const getProfile = catchAsync(async (req: Request, res: Response, next: N
 
   res.json({ user: otherData });
 });
+
+
+// ============= REJECTIONS ================= //
+export const rejectProfilePhoto = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const { applicationId } = req.body;
+
+  const application = await getApplication(applicationId);
+
+  application.passport = null;
+  applicationRepository.save(application);
+
+  await emailService.sendProfilePhotoRejectionMail(application);
+
+  res.json({
+    message: `Passport for application ${application.applicationId} has been rejected`
+  });
+});
+
+export const rejectBirthCertificate = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const { applicationId } = req.body;
+
+  const application = await getApplication(applicationId);
+
+  application.birthCert = null;
+  applicationRepository.save(application);
+
+  await emailService.sendBirthCertificateRejectionMail(application);
+
+  res.json({
+    message: `Birth certificate for application ${application.applicationId} has been rejected`
+  });
+});
+
+export const rejectHafizCertificate = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const { applicationId } = req.body;
+
+  const application = await getApplication(applicationId);
+
+  application.hafizCert = null;
+  applicationRepository.save(application);
+
+  await emailService.sendHafizCertificateRejectionMail(application);
+
+  res.json({
+    message: `Hafiz certificate for application ${application.applicationId} has been rejected`
+  });
+});
+

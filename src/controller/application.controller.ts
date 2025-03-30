@@ -10,6 +10,10 @@ import { applicationRepository } from "../utils/repositories";
 import { getApplicationId, getUserAge } from "../services/helpers";
 import getApplication from "../services/getApplication";
 import { uploadPhoto } from "../services/fileUpload";
+import { applicantionUpload } from "../services/applicationUploadChecker";
+import { EmailService } from "../services/sendEmail";
+
+const emailService = new EmailService();
 
 export const postApplication = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const applicationDto = plainToInstance(ApplicationDto, req.body);
@@ -60,9 +64,14 @@ export const uploadProfilePhoto = catchAsync(async (req: Request, res: Response,
   try {
     if (!req.file) return next(new AppError("Please upload a photo", StatusCode.BAD_REQUEST));
     const application = await getApplication(req.applicationId);
+    if (application.passport !== null && application.passport !== "") return next(new AppError("Sorry you have uploaded a passport before, to change it, kindly reach out to an admin", StatusCode.BAD_REQUEST));
+
     const photo = await uploadPhoto(req.file);
     application.passport = photo;
     await applicationRepository.save(application);
+
+    const isCompleted = applicantionUpload(application);
+    if (isCompleted) await emailService.applicationMail(application);
 
     res.json({message: "Passport uploaded successfully"});
   } catch (error: any) {
@@ -74,9 +83,15 @@ export const uploadBirthCert = catchAsync(async (req: Request, res: Response, ne
   try {
     if (!req.file) return next(new AppError("Please upload a photo", StatusCode.BAD_REQUEST));
     const application = await getApplication(req.applicationId);
+    if (application.birthCert !== null && application.birthCert !== "") return next(new AppError("Sorry you have uploaded a birth certificate before, to change it, kindly reach out to an admin", StatusCode.BAD_REQUEST));
+
     const photo = await uploadPhoto(req.file);
+
     application.birthCert = photo;
     await applicationRepository.save(application);
+
+    const isCompleted = applicantionUpload(application);
+    if (isCompleted) await emailService.applicationMail(application);
 
     res.json({message: "Birth certificatex uploaded successfully"});
   } catch (error: any) {
@@ -88,9 +103,14 @@ export const uploadHarfiz = catchAsync(async (req: Request, res: Response, next:
   try {
     if (!req.file) return next(new AppError("Please upload a photo", StatusCode.BAD_REQUEST));
     const application = await getApplication(req.applicationId);
+    if (application.hafizCert !== null && application.hafizCert !== "") return next(new AppError("Sorry you have uploaded a Hafiz certificate before, to change it, kindly reach out to an admin", StatusCode.BAD_REQUEST));
+
     const photo = await uploadPhoto(req.file);
     application.hafizCert = photo;
     await applicationRepository.save(application);
+
+    const isCompleted = applicantionUpload(application);
+    if (isCompleted) await emailService.applicationMail(application);
 
     res.json({message: "Harfiz certificate uploaded successfully"});
   } catch (error: any) {
