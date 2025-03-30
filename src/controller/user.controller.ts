@@ -94,14 +94,14 @@ export const getProfile = catchAsync(async (req: Request, res: Response, next: N
 
 // ============= REJECTIONS ================= //
 export const rejectProfilePhoto = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const { applicationId } = req.body;
+  const { applicationId, reason } = req.body;
 
   const application = await getApplication(applicationId);
 
   application.passport = null;
   applicationRepository.save(application);
 
-  await emailService.sendProfilePhotoRejectionMail(application);
+  await emailService.sendProfilePhotoRejectionMail(application, reason);
 
   res.json({
     message: `Passport for application ${application.applicationId} has been rejected`
@@ -109,14 +109,14 @@ export const rejectProfilePhoto = catchAsync(async (req: Request, res: Response,
 });
 
 export const rejectBirthCertificate = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const { applicationId } = req.body;
+  const { applicationId, reason } = req.body;
 
   const application = await getApplication(applicationId);
 
   application.birthCert = null;
   applicationRepository.save(application);
 
-  await emailService.sendBirthCertificateRejectionMail(application);
+  await emailService.sendBirthCertificateRejectionMail(application, reason);
 
   res.json({
     message: `Birth certificate for application ${application.applicationId} has been rejected`
@@ -124,14 +124,14 @@ export const rejectBirthCertificate = catchAsync(async (req: Request, res: Respo
 });
 
 export const rejectHafizCertificate = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const { applicationId } = req.body;
+  const { applicationId, reason } = req.body;
 
   const application = await getApplication(applicationId);
 
   application.hafizCert = null;
   applicationRepository.save(application);
 
-  await emailService.sendHafizCertificateRejectionMail(application);
+  await emailService.sendHafizCertificateRejectionMail(application, reason);
 
   res.json({
     message: `Hafiz certificate for application ${application.applicationId} has been rejected`

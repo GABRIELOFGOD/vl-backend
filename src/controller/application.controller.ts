@@ -27,7 +27,7 @@ export const postApplication = catchAsync(async (req: Request, res: Response, ne
 
   if (userRegistered) return next(new AppError("Sorry you have applied before, kindly login to your account", StatusCode.CONFLICT));
 
-  const userAge = getUserAge(applicationDto.dob);
+  const userAge = getUserAge(applicationDto.dob, applicationDto.ageGroup);
 
   let applicationId = getApplicationId();
   while (await applicationRepository.findOne({ where: { applicationId } })) {
