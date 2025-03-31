@@ -52,7 +52,7 @@ export class EmailService {
           <br>
           A unique Application as be assigned to you, use this id to complete your application by uploading the video of the surah assigned to you. <b>ApplicationID: <span class="color: blue; font-size: 30px">${application.applicationId}</span></b><br> 
           <br>
-          click <a href="https://versesoflight/continue?${application.applicationId}">Here</a> to continue with your application or copy this link and paste on your browser https://versesoflight/continue?${application.applicationId}
+          click <a href="https://versesoflight/continue?applicationId=${application.applicationId}">Here</a> to continue with your application or copy this link and paste on your browser https://versesoflight/continue?applicationId=${application.applicationId}
           Please go through our FAQs for the answer to your questions, and if you have further question, please reach out to us. Thank you.</p>
         </body>
       </html>

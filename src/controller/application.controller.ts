@@ -50,7 +50,6 @@ export const postApplication = catchAsync(async (req: Request, res: Response, ne
 
 export const getApplicationWithApplicationId = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const applicationId = req.params.applicationId;
-  console.log("Heye");
   const application = await applicationRepository.findOne({
     where: { applicationId }
   });
