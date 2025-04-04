@@ -52,7 +52,7 @@ export class EmailService {
           <br>
           A unique Application as be assigned to you, use this id to complete your application by uploading the video of the surah assigned to you. <b>ApplicationID: <span class="color: blue; font-size: 30px">${application.applicationId}</span></b><br> 
           <br>
-          click <a href="https://versesoflight/continue?applicationId=${application.applicationId}">Here</a> to continue with your application or copy this link and paste on your browser https://versesoflight/continue?applicationId=${application.applicationId}
+          Click <a href="https://versesoflight/continue?applicationId=${application.applicationId}">Here</a> to continue with your application or copy this link and paste on your browser https://versesoflight/continue?applicationId=${application.applicationId} <br>
           Please go through our FAQs for the answer to your questions, and if you have further question, please reach out to us. Thank you.</p>
         </body>
       </html>
@@ -64,6 +64,25 @@ export class EmailService {
       message
     });
   }
+
+  videoUploaded = async (application: Application) => {
+    const message = `
+      <html>
+        <body>
+          <p>Dear ${application.fname}</p>
+          <p>Thank you for applying for verse of light Quranic competiton, your application as been received and will be reveiwed duly, Please stay glued to your email as we will communicate the progress in your application to you through your email<br>
+          <br>
+          Your surah recitation video has been received and will as well be reviewed duly. Please note that selection will be done without favouritism, we will inform you what next via email, thank you.
+        </body>
+      </html>
+    `
+
+    await this.sendEmail({
+      title: "Surah video uploaded",
+      to: application.email,
+      message
+    });
+  };
 
   sendProfilePhotoRejectionMail = async (application: Application, reason: string) => {
     const message = `

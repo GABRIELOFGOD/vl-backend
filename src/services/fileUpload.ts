@@ -21,3 +21,22 @@ export const uploadPhoto = async (file: any): Promise<string> => {
 
   return result.secure_url;
 };
+
+export const videoUploader = async (file: any): Promise<string> => {
+  if (!file) {
+    throw new AppError("No image provided", StatusCode.NO_CONTENT);
+  }
+
+  const result = await new Promise<{ secure_url: string }>((resolve, reject) => {
+    cloudinary.uploader.upload_large(file.path, (error: any, result: { secure_url: string }) => {
+      if (error) {
+        console.log("Cloudinary upload error", error);
+        reject(error);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+
+  return result.secure_url;
+}

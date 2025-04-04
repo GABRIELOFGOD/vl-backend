@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { completeApplication, continueApplication, getApplicationWithApplicationId, postApplication, uploadBirthCert, uploadHarfiz, uploadProfilePhoto } from "../controller/application.controller";
+import { completeApplication, continueApplication, getApplicationWithApplicationId, postApplication, uploadBirthCert, uploadHarfiz, uploadProfilePhoto, uploadVideo } from "../controller/application.controller";
 import { userAuth } from "../middleware/adminAuth.middleware";
 import multer from "multer";
 import { applicationAuth } from "../middleware/application.middleware";
@@ -24,6 +24,8 @@ applicationRoute.patch("/harfiz", applicationAuth, upload.single("avatar"), uplo
 
 applicationRoute.patch("/birth", applicationAuth, upload.single("avatar"), uploadBirthCert);
 
+applicationRoute.patch("/video", applicationAuth, upload.single("video"), uploadVideo);
+
 applicationRoute.patch("/:id", (req, res) => {res.send(`Updating application with id ${req.params.id}`)});
 
 applicationRoute.post("/complete", completeApplication);
@@ -31,7 +33,7 @@ applicationRoute.post("/complete", completeApplication);
 applicationRoute.post("/continue", continueApplication);
 
 applicationRoute.use(userAuth);
-applicationRoute.get("/all", (req, res) => {res.send("Gennting all applications")});
+applicationRoute.get("/all", (req, res) => {res.send("Getting all applications")});
 applicationRoute.put("/:id", (req, res) => {res.send(`Updating application with id ${req.params.id}`)});
 applicationRoute.get("/:id", (req, res) => {res.send(`getting application with id ${req.params.id}`)});
 

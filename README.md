@@ -14,4 +14,4 @@ Verse of light is a website that allow users to participate in Quranic competiti
 ## Documetation
 * Reachout for Postman documentation of the project
 
-#### I am going to add all the project handling like the routes, controllers, email handlers and the rest in my next Update for the README file.
+#### I am going to add all the project handling like the routes, controllers, email handlers and the rest in my next Update for the README file.k

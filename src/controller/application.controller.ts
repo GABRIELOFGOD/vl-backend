@@ -9,7 +9,7 @@ import { StatusCode } from "../utils/statusCode";
 import { applicationRepository } from "../utils/repositories";
 import { getApplicationId, getUserAge } from "../services/helpers";
 import getApplication from "../services/getApplication";
-import { uploadPhoto } from "../services/fileUpload";
+import { uploadPhoto, videoUploader } from "../services/fileUpload";
 import { applicantionUpload } from "../services/applicationUploadChecker";
 import { EmailService } from "../services/sendEmail";
 
@@ -112,6 +112,23 @@ export const uploadHarfiz = catchAsync(async (req: Request, res: Response, next:
     if (isCompleted) await emailService.applicationMail(application);
 
     res.json({message: "Harfiz certificate uploaded successfully"});
+  } catch (error: any) {
+    throw new AppError(error.message || "Something went wrong", error.statusCode || StatusCode.INTERNAL_SERVER_ERROR);
+  }
+});
+
+export const uploadVideo = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (!req.file) return next(new AppError("Please upload a photo", StatusCode.BAD_REQUEST));
+    const application = await getApplication(req.applicationId);
+    if (application.appVideo !== null && application.hafizCert !== "") return next(new AppError("Sorry you have uploaded a surah recitation before, to change it, kindly reach out to an admin", StatusCode.BAD_REQUEST));
+
+    const video = await videoUploader(req.file);
+    application.appVideo = video;
+    await applicationRepository.save(application);
+
+    await emailService.videoUploaded(application);
+    res.json({ message: "Video uploaded successfully, an email will be sent to you shortly." })
   } catch (error: any) {
     throw new AppError(error.message || "Something went wrong", error.statusCode || StatusCode.INTERNAL_SERVER_ERROR);
   }
