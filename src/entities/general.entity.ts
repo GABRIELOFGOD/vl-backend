@@ -14,6 +14,9 @@ export class General {
   @Column({ type: "boolean", default: true })
   allowAdminRegistration: boolean;
 
+  @Column({ type: "timestamp", default: null, nullable: true })
+  applicationStartDate: Date;
+
   @CreateDateColumn({ type: "timestamp" })
   createdAt: Date;
 

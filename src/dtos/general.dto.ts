@@ -1,15 +1,21 @@
-import { IsBoolean, IsOptional } from "class-validator";
+import { IsBoolean, IsDate, IsNotEmpty, IsOptional, ValidateIf } from "class-validator";
 
 export class UpdateGeneralSettingsDto {
-  @IsOptional()
+  @IsNotEmpty()
   @IsBoolean()
   applicationOpen: boolean;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsBoolean()
   allowVideoUpload: boolean;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsBoolean()
   allowAdminRegistration: boolean;
+
+  @ValidateIf((o) => o.applicationOpen !== null)
+  @IsDate()
+  @IsOptional()
+  applicationStartDate: string | null;
+  
 }

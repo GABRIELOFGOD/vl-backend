@@ -134,6 +134,13 @@ export const uploadVideo = catchAsync(async (req: Request, res: Response, next: 
   }
 });
 
+export const getAllApplications = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const applications = await applicationRepository.find({ order: { createdAt: "DESC" } });
+  if (!applications) return next(new AppError("No applications found", StatusCode.NOT_FOUND));
+
+  res.json({ applications });
+});
+
 export const continueApplication = catchAsync(async (req: Request, res: Response, next: NextFunction) => {})
 
 export const completeApplication = catchAsync(async (req: Request, res: Response, next: NextFunction) => {});

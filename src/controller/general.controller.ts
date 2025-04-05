@@ -22,6 +22,6 @@ export const updateSetting = catchAsync(async (req: Request, res: Response, next
       return next(new AppError(errors.map(err => Object.values(err.constraints || {})).join(", "), StatusCode.BAD_REQUEST));
     }
   // const updateSettingDto: UpdateGeneralSettingsDto = req.body;
-  const updatedSettings = await generalRepository.update(1, updateSettingDto);
-  res.json({ message: "Settings Updated" });
+  await generalRepository.update(1, updateSettingDto);
+  res.json({ message: "Settings Updated", settings: updateSettingDto });
 });
