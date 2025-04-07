@@ -1,17 +1,83 @@
-# VERSES OF LIGHT PROJECT
-## Backend for Verses of light (www.versesoflight.org)
+# VERSES OF LIGHT
 
-### About Project
-Verse of light is a website that allow users to participate in Quranic competitions throughout Nigeria and according to the project owner, it is the first of it's kind in Nigeria, I am building this as a full stack website with a friend (co-developer) but I am handling absolutely the backend.
+A Quranic competition website in Nigeria
 
-### Tech-stack used
-* Node.js and Express (as the project framework)
-* MySql for Database
-* TypeOrm for Database migrations
-* Class-Validator for input validation
-* Also I must mention that the code is fully written in Typescript.
+## 📌 Table of Contents
+- [About](#about)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
+- [API Documentation](#api-documentation)
+- [Contributing](#contributing)
+- [License](#license)
+- [Author](#author)
 
-## Documetation
-* Reachout for Postman documentation of the project
+## 📖 About
 
-#### I am going to add all the project handling like the routes, controllers, email handlers and the rest in my next Update for the README file.k
+A Quranic competition website in Nigeria
+
+## ✨ Features
+
+- Application
+- Review
+- Document upload
+- Application control
+- Application review
+- Application confirm and Rejection
+
+## 🛠 Tech Stack
+
+- Node.js
+- MySql
+- TypeOrm
+- nodemailer
+- JWT
+- bcrypt.js
+- Express
+- Typescript
+- Cloudinary
+
+## 🧰 Getting Started
+
+### Installation
+
+```bash
+npm install
+```
+
+### Run Project
+
+```bash
+npm run start:dev
+```
+
+## 🔐 Environment Variables
+
+```
+NODE_ENV=your_value
+JWT_SECRET=your_value
+PORT=your_value
+CLOUDINARY_CLOUD_NAME=your_value
+CLOUDINARY_API_KEY=your_value
+CLOUDINARY_API_SECRET=your_value
+CLOUDINARY_UPLOAD_PRESET=your_value
+GOOGLE_EMAIL_AUTH=your_value
+EMAIL_SERVICE=your_value
+```
+
+## 📫 API Documentation
+
+API docs coming soon...
+
+## 🤝 Contributing
+
+Contributions are welcome! Fork the repo and open a PR.
+
+## 📄 License
+
+Licensed under the **MIT** license.
+
+## 👨‍💻 Author
+
+[GABRIELOFGOD](https://github.com/GABRIELOFGOD/vl-backend)
